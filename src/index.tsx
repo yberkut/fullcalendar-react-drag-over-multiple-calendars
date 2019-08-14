@@ -45,7 +45,6 @@ function App() {
         {eventData.map((event, index) => (
           <div
             key={index}
-            // ref={drag}
             className="fc-event"
             style={{ margin: 6, fontSize: 14, padding: 2, height: 20 }}
             title={event.title}
@@ -55,7 +54,7 @@ function App() {
           </div>
         ))}
       </div>
-      <div style={{ display: "flex" }}>
+      <div className="calendars" style={{ display: "flex" }}>
         <div style={{ marginRight: 15 }}>
           <p>
             <strong>My Calendar</strong>

@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import uuid4 from "uuid/v4";
+import moment from "moment";
 
 import FullCalendar from "@fullcalendar/react";
 import { Calendar } from "@fullcalendar/core";
@@ -65,7 +66,26 @@ export const WorkCalendar: FC<WorkCalendarProps> = props => {
     // className: classes.extEvent
   };
 
+  const handleExternalEventDrop = (info: {
+    date: Date;
+    draggedEl: HTMLElement;
+  }) => {
+    const title = info.draggedEl.getAttribute("title") || "";
+    const durationStr = info.draggedEl.getAttribute("data-duration") || "";
+    const minutes = moment.duration(durationStr).as("minutes");
+    const newEvent = {
+      id: uuid4(),
+      title: title,
+      start: info.date,
+      end: moment(info.date)
+        .add(minutes, "m")
+        .toDate()
+    };
+    onAddExternal && onAddExternal(newEvent);
+  };
+
   const handleEventReceive = ({ event }: { event: EventApi }) => {
+    debugger;
     const newEvent = {
       id: uuid4(),
       title: event.title,
@@ -105,6 +125,7 @@ export const WorkCalendar: FC<WorkCalendarProps> = props => {
         eventTimeFormat={"H:mm"}
         height="parent"
         eventSources={[extEventSource]}
+        drop={handleExternalEventDrop}
         eventReceive={handleEventReceive}
       />
     </div>
